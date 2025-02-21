@@ -18,6 +18,12 @@ namespace TP3console
             Exo2Q7();
             Exo2Q8();
             Exo2Q9();
+
+            Exo3Q1();
+            Exo3Q2();
+            Exo3Q3();
+            Exo3Q4();
+            Exo3Q5();
             Console.ReadKey();
         }
 
@@ -130,6 +136,111 @@ namespace TP3console
                 .FirstOrDefault();
             // Afficher l’utilisateur qui a mis la meilleure note dans la base.
             Console.WriteLine($"Utilisateur ayant mis la meilleure note : {utilisateurMeilleureNote}");
+        }
+
+        public static void Exo3Q1()
+        {
+            var ctx = new FilmsDbContext();
+            // Ajoutez - vous en tant qu’utilisateur.
+            Utilisateur utilisateur = new Utilisateur
+            {
+                Login = "barriefl",
+                Email = "Florian.Barrier@etu.univ-smb.fr",
+                Pwd = "mdp"
+            };
+            ctx.Add(utilisateur);
+            ctx.SaveChanges();
+            Console.WriteLine("Nouvel utilisateur ajouté.");
+        }
+
+        public static void Exo3Q2()
+        {
+            var ctx = new FilmsDbContext();
+            // Modifier un film.
+            var film = ctx.Films.FirstOrDefault(f => f.Nom.ToLower() == "l'armee des douze singes".ToLower());
+            if (film != null)
+            {
+                film.Description = "Film où il y a 12 singes qui font une armée.";
+
+                var categorieDrame = ctx.Categories.FirstOrDefault(c => c.Nom.ToLower() == "drame".ToLower());
+                if (categorieDrame != null)
+                {
+                    film.Idcategorie = categorieDrame.Idcategorie;
+                    ctx.SaveChanges();
+                    Console.WriteLine("Mise à jour du film réussie.");
+                }
+                else
+                {
+                    Console.WriteLine("La catégorie drame n'existe pas.");
+                }            
+            }
+            else
+            {
+                Console.WriteLine("Le film l'armée des douze singes n'a pas été trouvée.");
+            }  
+        }
+
+        public static void Exo3Q3()
+        {
+            var ctx = new FilmsDbContext();
+            // Supprimer un film.
+            var film = ctx.Films.FirstOrDefault(f => f.Nom.ToLower() == "l'armee des douze singes".ToLower());
+            if (film != null) 
+            {
+                var avisAssocies = ctx.Avis.Where(a => a.Idfilm == film.Idfilm).ToList();
+                ctx.Avis.RemoveRange(avisAssocies);
+                ctx.Films.Remove(film);
+                ctx.SaveChanges();
+                Console.WriteLine("Le film et ses avis ont été supprimés.");
+            }
+            else
+            {
+                Console.WriteLine("Le film l'armée des douze singes n'a pas été trouvée.");
+            }
+        }
+
+        public static void Exo3Q4()
+        {
+            var ctx = new FilmsDbContext();
+            // Ajouter un avis.
+            var film = ctx.Films.FirstOrDefault(f => f.Nom.ToLower() == "titanic".ToLower());
+            var monAvis = new Avi()
+            {
+                Idfilm = film.Idfilm,
+                Idutilisateur = 1,
+                Commentaire = "Nicolas c'est une petite coquine.",
+                Note = 0
+            };
+            ctx.Avis.Add(monAvis);
+            ctx.SaveChanges();
+            Console.WriteLine("Nouvel avis ajouté.");
+        }
+
+        public static void Exo3Q5() 
+        {
+            var ctx = new FilmsDbContext();
+            // Ajouter 2 films dans la catégorie « Drame ».
+            var categorieDrame = ctx.Categories.FirstOrDefault(c => c.Nom.ToLower() == "drame".ToLower());
+            var nouveauxFilms = new List<Film>
+            {
+                new Film 
+                { 
+                    Idfilm = 50,
+                    Nom = "Le Chemin du Destin", 
+                    Description = "Un drame poignant sur le destin.", 
+                    Idcategorie = categorieDrame.Idcategorie 
+                },
+                new Film 
+                {
+                    Idfilm = 51,
+                    Nom = "Les Larmes de l'Horizon", 
+                    Description = "Un film émouvant sur l'espoir et la perte.", 
+                    Idcategorie = categorieDrame.Idcategorie 
+                }
+            };
+            ctx.Films.AddRange(nouveauxFilms);
+            ctx.SaveChanges();
+            Console.WriteLine("Les nouveaux films ont été ajoutés à la catégorie 'Drame'.");
         }
     }
 }
