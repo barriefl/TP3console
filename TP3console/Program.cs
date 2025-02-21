@@ -9,19 +9,16 @@ namespace TP3console
         {
             using (var ctx = new FilmsDbContext())
             {
-                // Désactivation du tracking => Aucun changement dans la base ne sera effectué.
-                ctx.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+                Categorie categorieAction = ctx.Categories.First(c => c.Nom == "Action");
+                Console.WriteLine("Categorie : " + categorieAction.Nom);
 
-                // Requête SELECT.
-                Film titanic = ctx.Films.First(f => f.Nom.Contains("Titanic"));
-
-                // Modification de l'entité (dans le contexte seulement).
-                titanic.Description = "Un bateau échoué. Date : " + DateTime.Now;
-
-                // Sauvegarde du contexte => Application de la modification dans la BD.
-                int nbchanges = ctx.SaveChanges();
-
-                Console.WriteLine("Nombre d'enregistrements modifiés ou ajoutés : " + nbchanges);
+                //Chargement des films dans categorieAction
+                ctx.Entry(categorieAction).Collection(c => c.Films).Load();
+                Console.WriteLine("Films : ");
+                foreach (var film in categorieAction.Films)
+                {
+                    Console.WriteLine(film.Nom);
+                }
             }
         }
     }

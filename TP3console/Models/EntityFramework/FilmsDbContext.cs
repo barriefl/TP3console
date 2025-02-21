@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace TP3console.Models.EntityFramework;
 
@@ -23,9 +24,13 @@ public partial class FilmsDbContext : DbContext
 
     public virtual DbSet<Utilisateur> Utilisateurs { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseNpgsql("Server=localhost; port=5432; Database=FilmsDB; uid=postgres; password=postgres;");
+    public static readonly ILoggerFactory MyLoggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        => optionsBuilder.UseLoggerFactory(MyLoggerFactory)
+                         .EnableSensitiveDataLogging()
+                         .UseNpgsql("Server=localhost; port=5432; Database=FilmsDB; uid=postgres; password=postgres;");
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Avi>(entity =>
