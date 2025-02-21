@@ -1,4 +1,5 @@
-﻿using TP3console.Models.EntityFramework;
+﻿using Microsoft.EntityFrameworkCore;
+using TP3console.Models.EntityFramework;
 
 namespace TP3console
 {
@@ -8,6 +9,9 @@ namespace TP3console
         {
             using (var ctx = new FilmsDbContext())
             {
+                // Désactivation du tracking => Aucun changement dans la base ne sera effectué.
+                ctx.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+
                 // Requête SELECT.
                 Film titanic = ctx.Films.First(f => f.Nom.Contains("Titanic"));
 
