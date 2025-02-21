@@ -9,11 +9,13 @@ namespace TP3console
         {
             using (var ctx = new FilmsDbContext())
             {
-                Categorie categorieAction = ctx.Categories.First(c => c.Nom == "Action");
-                Console.WriteLine("Categorie : " + categorieAction.Nom);
+                //Chargement de la catégorie Action et des films de cette catégorie
+                Categorie categorieAction = ctx.Categories
+                .Include(c => c.Films)
+                .ThenInclude(f => f.Avis)
+                .First(c => c.Nom == "Action");
 
-                //Chargement des films dans categorieAction
-                ctx.Entry(categorieAction).Collection(c => c.Films).Load();
+                Console.WriteLine("Categorie : " + categorieAction.Nom);
                 Console.WriteLine("Films : ");
                 foreach (var film in categorieAction.Films)
                 {
