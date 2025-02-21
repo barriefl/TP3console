@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace TP3console.Models.EntityFramework
+{
+    internal class UtilisateurPart : Utilisateur
+    {
+        public override string? ToString()
+        {
+            return "Login : " + this.Login;
+        }
+    }
+}

@@ -10,13 +10,13 @@ namespace TP3console.Models.EntityFramework;
 [Table("categorie")]
 public partial class Categorie
 {
-    private ILazyLoader _lazyLoader;
-    private ICollection<Film> films;
+    //private ILazyLoader _lazyLoader;
+    //private ICollection<Film> films;
 
-    public Categorie(ILazyLoader lazyLoader) 
-    {
-        _lazyLoader = lazyLoader;
-    }
+    //public Categorie(ILazyLoader lazyLoader) 
+    //{
+    //    _lazyLoader = lazyLoader;
+    //}
 
     [Key]
     [Column("idcategorie")]
@@ -29,16 +29,16 @@ public partial class Categorie
     [Column("description")]
     public string? Description { get; set; }
 
-    //[InverseProperty("IdcategorieNavigation")]
-    //public virtual ICollection<Film> Films { get; set; } = new List<Film>();
+    [InverseProperty("IdcategorieNavigation")]
+    public virtual ICollection<Film> Films { get; set; } = new List<Film>();
 
-    [InverseProperty("CategorieNavigation")]
-    public virtual ICollection<Film> Films
-    {
-        get
-        {
-            return _lazyLoader.Load(this, ref films);
-        }
-        set { films = value; }
-    }
+    //[InverseProperty("CategorieNavigation")]
+    //public virtual ICollection<Film> Films
+    //{
+    //    get
+    //    {
+    //        return _lazyLoader.Load(this, ref films);
+    //    }
+    //    set { films = value; }
+    //}
 }
