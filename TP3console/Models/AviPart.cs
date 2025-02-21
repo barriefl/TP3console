@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TP3console.Models.EntityFramework
 {
-    internal class AviPart : Avi
+    public partial class Avi
     {
         public override string? ToString()
         {

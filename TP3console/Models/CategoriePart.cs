@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TP3console.Models.EntityFramework
 {
-    internal class CategoriePart : Categorie
+    public partial class Categorie
     {
         public override string? ToString()
         {

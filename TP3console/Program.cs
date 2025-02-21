@@ -7,18 +7,28 @@ namespace TP3console
     {
         static void Main(string[] args)
         {
-            using (var ctx = new FilmsDbContext())
-            {
-                //Chargement de la catégorie Action
-                Categorie categorieAction = ctx.Categories.First(c => c.Nom == "Action");
-                Console.WriteLine("Categorie : " + categorieAction.Nom);
-                Console.WriteLine("Films : ");
+            Exo2Q1();
+            Console.ReadKey();
+        }
 
-                //Chargement des films de la catégorie Action.
-                foreach (var film in categorieAction.Films) // lazy loading initiated
-                {
-                    Console.WriteLine(film.Nom);
-                }
+        public static void Exo2Q1()
+        {
+            var ctx = new FilmsDbContext();
+            foreach (var film in ctx.Films)
+            {
+                Console.WriteLine(film.ToString());
+            }
+        }
+
+        //Autre possibilité :
+        public static void Exo2Q1Bis()
+        {
+            var ctx = new FilmsDbContext();
+            //Pour que cela marche, il faut que la requête envoie les mêmes noms de colonnes que les classes c#.
+            var films = ctx.Films.FromSqlRaw("SELECT * FROM film");
+            foreach (var film in films)
+            {
+                Console.WriteLine(film.ToString());
             }
         }
     }

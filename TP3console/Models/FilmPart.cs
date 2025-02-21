@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TP3console.Models.EntityFramework
 {
-    internal class FilmPart : Film
+    public partial class Film
     {
         public override string? ToString()
         {
